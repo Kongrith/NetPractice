@@ -246,25 +246,57 @@ A Public IP Address is assigned by your Internet Service Provider (or ISP). The 
 
 Network configuration involves setting up network devices (IP, subnet mask, default gateway) to communicate, while subnetting breaks a large network into smaller, manageable subnetworks to improve security, traffic management, and IP efficiency. The important physical devices are:
 
+- **Gateway**: A network device (usually a router) that acts as an entry and exit point for a network.
 - **Switches**: A Layer 2 device that connect devices within the same local network.
 - **Routers**: A Layer 3 device that connect different networks and direct traffic between them.
-- **Gateway**: A network device (usually a router) that acts as an entry and exit point for a network.
+
+Additionally, these definitions are introduced for internet connection.
+
+- **Default Gateways**: The doorway that connect from a local network to external networks.
+- **Interface**: A physical port or connection point on a network device.
+
+#### Routing Table
+
+Routing Table is a data table in a router that lists routes to network destinations and next hop. The next hop is an IP address of the next router a packet should be sent to on its path to the destination.
 
 ```
-IP Address:     192.168.1.100
-Subnet Mask:    255.255.255.0    (/24)
-Network:        192.168.1.0
-Host:           0.0.0.100
+Destination        =>    Next Hop
+49.198.111.0/22          163.172.250.12
 ```
-
-Default Gateways The doorway that connect from a local network to external networks.
-Interface: A physical port or connection point on a network device.
-Default Route (0.0.0.0/0): A routing table entry that acts as a "gateway of last resort" for unknown destinations.
-
-Routing Table: A data table in a router that lists routes to network destinations.
-Next Hop: The IP address of the next router a packet should be sent to on its path to the destination.
 
 **Remark**:
-default or 0.0.0.0/0 , we will focus on TPC/IP with IPv4.
+default route or 0.0.0.0/0 is routing table entry that acts as an "available for the entire network" for unknown destinations.
 
-[TCP/IP Protocol](https://www.a1.digital/knowledge-hub/tcp-ip-explained/)
+#### Subnetting Example
+
+The internet has a routing table with a destination route of `7.7.1.0/26` connect via interface `163.91.250.12/26` to the router gateway of `163.91.250.1`. The routing table is shown as below:
+
+```
+Destination        =>    Next Hop
+7.7.1.0/26               163.91.250.12/26
+```
+
+That mean that it can send back packets from IPs ranging from `7.7.1.0` to `7.7.1.63`. If we divide the network with CIDR (/28), we have got the non-overalpping 4 networks as following:
+
+```
+Network 1: From 7.7.1.0  to 7.7.1.15 (excluded first and last IPs)
+Network 2: From 7.7.1.16 to 7.7.1.31 (excluded first and last IPs)
+Network 3: From 7.7.1.32 to 7.7.1.47 (excluded first and last IPs)
+Network 4: From 7.7.1.48 to 7.7.1.63 (excluded first and last IPs)
+```
+
+---
+
+## 📖 References
+
+- Network Fundamental:
+  - [The Internet's Layered Network Architecture](https://www.codequoi.com/en/internet-layered-network-architecture/)
+  - [IPv4 Addresses, Routing and Subnet Masks](https://www.codequoi.com/en/ipv4-addresses-routing-and-subnet-masks/)
+
+- Guideline & Walkthrough:
+  - Youtube [Computer Networks: Crash Course Computer Science](https://www.youtube.com/watch?v=HQUw0CfQWAM).
+  - Slide [Computer Networks: Crash Course Computer Science](https://docs.google.com/presentation/d/e/2PACX-1vSHNDVR-drtwoUsNS-kfkYPyMKcTXB4X2i4kHyJlbCmz9thSo0-7GWev9-wIfE3HKHIS_bv5XJn2GCP/pub?start=false&loop=false&delayms=3000&slide=id.p).
+
+- Code Repositories from 42 CADET:
+  - [1337](https://github.com/msabr/NET-PRACTICE-1337)
+  - [caroldaniel](https://github.com/caroldaniel/42sp-cursus-netpractice)
